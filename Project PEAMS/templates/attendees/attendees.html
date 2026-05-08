@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Attendees Management</title>
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        table, th, td { border: 1px solid #ccc; }
+        th, td { padding: 10px; text-align: center; }
+
+        .form-box {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+        }
+
+        input {
+            padding: 8px;
+            margin: 5px;
+        }
+
+        button {
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>👤 Attendees Management</h2>
+
+<!-- CREATE ATTENDEE -->
+<div class="form-box">
+    <h3>Add Attendee</h3>
+    <form method="POST" action="/add_attendee">
+        <input type="text" name="name" placeholder="Full Name" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <button type="submit">Add</button>
+    </form>
+</div>
+
+<!-- READ ATTENDEES -->
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Actions</th>
+    </tr>
+
+    <!-- Flask Jinja loop -->
+    {% for attendee in attendees %}
+    <tr>
+        <td>{{ attendee.id }}</td>
+        <td>{{ attendee.name }}</td>
+        <td>{{ attendee.email }}</td>
+        <td>
+
+            <!-- UPDATE -->
+            <form method="POST" action="/update_attendee" style="display:inline;">
+                <input type="hidden" name="id" value="{{ attendee.id }}">
+                <input type="text" name="name" value="{{ attendee.name }}">
+                <input type="email" name="email" value="{{ attendee.email }}">
+                <button type="submit">Update</button>
+            </form>
+
+            <!-- DELETE -->
+            <form method="POST" action="/delete_attendee" style="display:inline;">
+                <input type="hidden" name="id" value="{{ attendee.id }}">
+                <button type="submit">Delete</button>
+            </form>
+
+        </td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+</body>
+</html>
