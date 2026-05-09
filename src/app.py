@@ -1,13 +1,145 @@
 from flask import Flask, render_template, request, redirect
 from database import get_connection
+from werkzeug.security import generate_password_hash
 import os
 print("CURRENT DIR:", os.getcwd())
 
 app = Flask(__name__)
 
+# =========================
+# VIEW USERS
+# =========================
+@app.route('/users')
+def users():
+
+    conn = get_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM users")
+    users = cursor.fetchall()
+
+    conn.close()
+
+    return render_template('users/users.html', users=users)
+
 
 # =========================
-# VIEW EVENTSs
+# ADD USERS
+# =========================
+@app.route('/users/add', methods=['GET', 'POST'])
+def add_user():
+
+    if request.method == 'POST':
+
+        full_name = request.form['full_name']
+        username = username.form['username']
+        email = request.form['email']
+        password = request.form['password']
+        hashed_password = generate_password_hash(password)
+        role = request.form['role']
+
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        try:
+            cursor.execute("""
+                INSERT INTO users (full_name, email, password, role)
+                VALUES (%s, %s, %s, %s)
+            """, (full_name, email, password, role))
+
+            conn.commit()
+
+        except Exception as e:
+            conn.rollback()
+            return f"Error: {e}"
+
+        finally:
+            conn.close()
+
+        return redirect('/users')
+
+    return render_template('users/add_user.html')
+
+# =========================
+# EDIT USERS
+# =========================
+@app.route('/users/edit/<int:id>', methods=['GET', 'POST'])
+def edit_user(id):
+
+    conn = get_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    if request.method == 'POST':
+
+        full_name = request.form['full_name']
+        email = request.form['email']
+        password = request.form['password']
+        hashed_password = generate_password_hash(password)
+        role = request.form['role']
+
+        try:
+            cursor.execute("""
+                UPDATE users
+                SET full_name=%s,
+                    email=%s,
+                    password=%s,
+                    role=%s
+                WHERE user_id=%s
+            """, (full_name, email, password, role, id))
+
+            conn.commit()
+
+        except Exception as e:
+            conn.rollback()
+            return f"Error: {e}"
+
+        finally:
+            conn.close()
+
+        return redirect('/users')
+
+    cursor.execute(
+        "SELECT * FROM users WHERE user_id=%s",
+        (id,)
+    )
+
+    user = cursor.fetchone()
+
+    conn.close()
+
+    return render_template('users/edit_user.html', user=user)
+
+
+# =========================
+# DELETE EVENTS
+# =========================
+@app.route('/users/delete/<int:id>')
+def delete_user(id):
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    try:
+
+        cursor.execute(
+            "DELETE FROM users WHERE user_id=%s",
+            (id,)
+        )
+
+        conn.commit()
+
+    except Exception as e:
+
+        conn.rollback()
+        return f"Error: {e}"
+
+    finally:
+        conn.close()
+
+    return redirect('/users')
+
+# =========================
+# VIEW EVENTS
 # =========================
 @app.route('/events')
 def events():
