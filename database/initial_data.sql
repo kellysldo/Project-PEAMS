@@ -1,5 +1,5 @@
 -- ============================================
--- Events Attendance Manager System
+-- Personal Events Attendance Manager System
 -- Course: Information Management 1 - CCCS105
 -- Initial Test Data
 -- ============================================
