@@ -1,5 +1,5 @@
 # Project-PEAMS
-# Events Attendance Management System
+# Professional Events Attendance Management System
 
 A web-based attendance tracking system that allows organizers to manage events, register participants, and monitor attendance with QR code support.
 
