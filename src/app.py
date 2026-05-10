@@ -12,7 +12,7 @@ app.secret_key = "your_secret_key"
 # ==================================================================================================
 
 # =========================
-# VIEW USERS
+# VIEW USERS + SEARCH
 # =========================
 @app.route('/users')
 def users():
@@ -48,7 +48,7 @@ def add_user():
     if request.method == 'POST':
 
         full_name = request.form['full_name']
-        username = username.form['username']
+        username = request.form['username']
         email = request.form['email']
         password = request.form['password']
         hashed_password = generate_password_hash(password)
@@ -157,16 +157,29 @@ def delete_user(id):
 
 
 # =========================
-# VIEW EVENTS
+# VIEW EVENTS + SEARCH
 # =========================
 @app.route('/events')
 def events():
 
+    search = request.args.get('search', '')
+
     conn = get_connection()
     cursor = conn.cursor(dictionary=True)
 
-    query = "SELECT * FROM events"
-    cursor.execute(query)
+    if search:
+        cursor.execute("""
+            SELECT * FROM events
+            WHERE event_name LIKE %s
+               OR location LIKE %s
+               OR description LIKE %s
+        """, (
+            f"%{search}%",
+            f"%{search}%",
+            f"%{search}%"
+        ))
+    else:
+        cursor.execute("SELECT * FROM events")
 
     events_list = cursor.fetchall()
 
@@ -309,14 +322,32 @@ def delete_event(id):
 # =========================
 # VIEW ATTENDEES
 # =========================
+# =========================
+# VIEW ATTENDEES + SEARCH
+# =========================
 @app.route('/attendees')
 def attendees():
+
+    search = request.args.get('search', '')
 
     conn = get_connection()
     cursor = conn.cursor(dictionary=True)
 
-    query = "SELECT * FROM attendees"
-    cursor.execute(query)
+    if search:
+        cursor.execute("""
+            SELECT * FROM attendees
+            WHERE fullname LIKE %s
+               OR email LIKE %s
+               OR contact_no LIKE %s
+               OR address LIKE %s
+        """, (
+            f"%{search}%",
+            f"%{search}%",
+            f"%{search}%",
+            f"%{search}%"
+        ))
+    else:
+        cursor.execute("SELECT * FROM attendees")
 
     attendees_list = cursor.fetchall()
 
@@ -457,8 +488,13 @@ def delete_attendee(id):
 # =========================
 # VIEW REGISTRATIONS
 # =========================
+# =========================
+# VIEW REGISTRATIONS + SEARCH
+# =========================
 @app.route('/registrations')
 def registrations():
+
+    search = request.args.get('search', '')
 
     conn = get_connection()
     cursor = conn.cursor(dictionary=True)
@@ -477,7 +513,20 @@ def registrations():
         ON registrations.event_id = events.event_id
     """
 
-    cursor.execute(query)
+    if search:
+        query += """
+        WHERE attendees.fullname LIKE %s
+           OR events.event_name LIKE %s
+           OR registrations.attendance_status LIKE %s
+        """
+
+        cursor.execute(query, (
+            f"%{search}%",
+            f"%{search}%",
+            f"%{search}%"
+        ))
+    else:
+        cursor.execute(query)
 
     registrations_list = cursor.fetchall()
 
@@ -572,6 +621,12 @@ def delete_registration(id):
 def register():
     if request.method == 'POST':
         full_name = request.form['full_name']
+        email = request.form.get('email') or None
+
+        if not email:
+            flash("Email is required")
+            return redirect('/users/add')
+
         username = request.form['username']
         password = request.form['password']
 
@@ -618,6 +673,7 @@ def login():
 
         cursor.close()
         conn.close()
+    
 
         if user and bcrypt.check_password_hash(
             user['password'],
@@ -626,10 +682,11 @@ def login():
 
             session['user_id'] = user['user_id']
             session['username'] = user['username']
+            session['role'] = user['role']
 
             flash("Login successful!")
 
-            return redirect(url_for('index'))
+            return redirect('/index.html')
 
         else:
             flash("Invalid username or password")

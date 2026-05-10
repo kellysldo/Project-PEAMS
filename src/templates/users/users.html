@@ -2,85 +2,111 @@
 <html>
 
 <head>
+
     <title>Users</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
           rel="stylesheet">
+
 </head>
 
-<body class="container mt-5">
+<body class="bg-light">
 
-    <h1 class="mb-4">Users List</h1>
+    <!-- NAVBAR -->
+    {% include 'partials/navbar.html' %}
 
-    <!-- TOP CONTROLS -->
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <!-- CONTENT -->
+    <div class="container mt-5">
 
-        <!-- LEFT SIDE -->
-        <div class="d-flex gap-2">
+        <h1 class="mb-4">
+            Users List
+        </h1>
 
-            <a href="/" class="btn btn-secondary">
-                ← Dashboard
-            </a>
+        <!-- TOP CONTROLS -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
 
-            <a href="/users/add" class="btn btn-primary">
-                Add User
-            </a>
+            <!-- LEFT -->
+            <div class="d-flex gap-2">
+
+                <a href="/"
+                   class="btn btn-secondary">
+                    ← Dashboard
+                </a>
+
+                <a href="/users/add"
+                   class="btn btn-primary">
+                    Add User
+                </a>
+
+            </div>
+
+            <!-- SEARCH -->
+            <form method="GET"
+                  action="/users"
+                  class="d-flex gap-2">
+
+                <input type="text"
+                       name="search"
+                       class="form-control form-control-sm"
+                       placeholder="Search user..."
+                       style="width: 250px;">
+
+                <button type="submit"
+                        class="btn btn-primary btn-sm">
+                    Search
+                </button>
+
+            </form>
 
         </div>
 
-        <!-- RIGHT SIDE (SEARCH) -->
-        <form method="GET" action="/users" class="d-flex gap-2">
+        <!-- TABLE -->
+        <table class="table table-bordered table-striped shadow-sm bg-white">
 
-            <input type="text"
-                   name="search"
-                   class="form-control form-control-sm"
-                   placeholder="Search user..."
-                   style="width: 250px;">
+            <tr>
 
-            <button type="submit" class="btn btn-primary btn-sm">
-                Search
-            </button>
+                <th>ID</th>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Created At</th>
+                <th>Actions</th>
 
-        </form>
+            </tr>
+
+            {% for user in users %}
+
+            <tr>
+
+                <td>{{ user.user_id }}</td>
+                <td>{{ user.full_name }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.role }}</td>
+                <td>{{ user.created_at }}</td>
+
+                <td>
+
+                    <a href="/users/edit/{{ user.user_id }}"
+                       class="btn btn-warning btn-sm">
+                        Edit
+                    </a>
+
+                    <a href="/users/delete/{{ user.user_id }}"
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('Delete this user?')">
+                        Delete
+                    </a>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
 
     </div>
 
-    <table class="table table-bordered table-striped">
-
-        <tr>
-            <th>ID</th>
-            <th>Full Name</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Created At</th>
-            <th>Actions</th>
-        </tr>
-
-        {% for user in users %}
-
-        <tr>
-            <td>{{ user.user_id }}</td>
-            <td>{{ user.full_name }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.role }}</td>
-            <td>{{ user.created_at }}</td>
-
-            <td>
-                <a href="/users/edit/{{ user.user_id }}"
-                   class="btn btn-warning btn-sm">
-                    Edit
-                </a>
-
-                <a href="/users/delete/{{ user.user_id }}"
-                   class="btn btn-danger btn-sm"
-                   onclick="return confirm('Delete this user?')">
-                    Delete
-                </a>
-            </td>
-        </tr>
-
-        {% endfor %}
-
-    </table>
-
 </body>
+
 </html>

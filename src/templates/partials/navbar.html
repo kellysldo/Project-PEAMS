@@ -1,0 +1,65 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+
+
+
+        <div class="container">
+
+            <a class="navbar-brand"
+               href="/">
+                PEAMS Dashboard
+            </a>
+
+        <!-- MOBILE TOGGLE -->
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav">
+
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+
+        <!-- NAVBAR LINKS -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+
+            <ul class="navbar-nav me-auto">
+
+                {% if session.get('role') == 'admin' %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/users">
+                        Users
+                    </a>
+                </li>
+                {% endif %}
+
+            </ul>
+
+            <!-- RIGHT SIDE -->
+            <div class="d-flex align-items-center">
+
+                <span class="text-light me-3">
+                    {{ session.username }}
+                </span>
+
+                {% if session.get('role') == 'admin' %}
+                    <span class="badge bg-warning text-dark me-3">
+                        ADMIN
+                    </span>
+                {% else %}
+                    <span class="badge bg-info text-dark me-3">
+                        USER
+                    </span>
+                {% endif %}
+
+                <a href="/logout"
+                   class="btn btn-danger btn-sm">
+                    Logout
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</nav>

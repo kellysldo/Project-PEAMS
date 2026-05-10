@@ -2,78 +2,101 @@
 <html>
 
 <head>
+
     <title>Registrations</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
 </head>
 
-<body class="container mt-5">
+<body class="bg-light">
 
-    <h1 class="mb-4">Registrations List</h1>
+    {% include 'partials/navbar.html' %}
 
-    <!-- TOP CONTROLS -->
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="container mt-5">
 
-        <!-- LEFT SIDE -->
-        <div class="d-flex gap-2">
+        <h1 class="mb-4">
+            Registrations List
+        </h1>
 
-            <a href="/" class="btn btn-secondary">
-                ← Dashboard
-            </a>
+        <!-- CONTROLS -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
 
-            <a href="/add_registration" class="btn btn-primary">
-                Add Registration
-            </a>
+            <div class="d-flex gap-2">
+
+                <a href="/"
+                   class="btn btn-secondary">
+                    ← Dashboard
+                </a>
+
+                <a href="/add_registration"
+                   class="btn btn-primary">
+                    Add Registration
+                </a>
+
+            </div>
+
+            <form method="GET"
+                  action="/registrations"
+                  class="d-flex gap-2">
+
+                <input type="text"
+                       name="search"
+                       class="form-control form-control-sm"
+                       placeholder="Search registration..."
+                       style="width: 250px;">
+
+                <button type="submit"
+                        class="btn btn-primary btn-sm">
+                    Search
+                </button>
+
+            </form>
 
         </div>
 
-        <!-- RIGHT SIDE (SEARCH) -->
-        <form method="GET" action="/registrations" class="d-flex gap-2">
+        <!-- TABLE -->
+        <table class="table table-bordered table-striped shadow-sm bg-white">
 
-            <input type="text"
-                   name="search"
-                   class="form-control form-control-sm"
-                   placeholder="Search registration..."
-                   style="width: 250px;">
+            <tr>
 
-            <button type="submit" class="btn btn-primary btn-sm">
-                Search
-            </button>
+                <th>ID</th>
+                <th>Attendee</th>
+                <th>Event</th>
+                <th>Status</th>
+                <th>Registration Date</th>
+                <th>Actions</th>
 
-        </form>
+            </tr>
+
+            {% for registration in registrations %}
+
+            <tr>
+
+                <td>{{ registration.registration_id }}</td>
+                <td>{{ registration.fullname }}</td>
+                <td>{{ registration.event_name }}</td>
+                <td>{{ registration.attendance_status }}</td>
+                <td>{{ registration.registration_date }}</td>
+
+                <td>
+
+                    <a href="/delete_registration/{{ registration.registration_id }}"
+                       class="btn btn-danger btn-sm">
+                        Delete
+                    </a>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
 
     </div>
 
-    <table class="table table-bordered table-striped">
-
-        <tr>
-            <th>ID</th>
-            <th>Attendee</th>
-            <th>Event</th>
-            <th>Status</th>
-            <th>Registration Date</th>
-            <th>Actions</th>
-        </tr>
-
-        {% for registration in registrations %}
-
-        <tr>
-            <td>{{ registration.registration_id }}</td>
-            <td>{{ registration.fullname }}</td>
-            <td>{{ registration.event_name }}</td>
-            <td>{{ registration.attendance_status }}</td>
-            <td>{{ registration.registration_date }}</td>
-
-            <td>
-                <a href="/delete_registration/{{ registration.registration_id }}"
-                   class="btn btn-danger btn-sm">
-                    Delete
-                </a>
-            </td>
-        </tr>
-
-        {% endfor %}
-
-    </table>
-
 </body>
+
 </html>
