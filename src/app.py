@@ -9,16 +9,29 @@ app = Flask(__name__)
 bcrypt = Bcrypt(app)
 app.secret_key = "your_secret_key"
 
+# ==================================================================================================
+
 # =========================
 # VIEW USERS
 # =========================
 @app.route('/users')
 def users():
 
+    search = request.args.get('search', '')
+
     conn = get_connection()
     cursor = conn.cursor(dictionary=True)
 
-    cursor.execute("SELECT * FROM users")
+    if search:
+        cursor.execute("""
+            SELECT * FROM users
+            WHERE full_name LIKE %s
+               OR email LIKE %s
+               OR role LIKE %s
+        """, (f"%{search}%", f"%{search}%", f"%{search}%"))
+    else:
+        cursor.execute("SELECT * FROM users")
+
     users = cursor.fetchall()
 
     conn.close()
@@ -114,7 +127,7 @@ def edit_user(id):
 
 
 # =========================
-# DELETE EVENTS
+# DELETE USERS
 # =========================
 @app.route('/users/delete/<int:id>')
 def delete_user(id):
@@ -140,6 +153,8 @@ def delete_user(id):
         conn.close()
 
     return redirect('/users')
+# ==================================================================================================
+
 
 # =========================
 # VIEW EVENTS
@@ -289,7 +304,7 @@ def delete_event(id):
 
     return redirect('/events')
 
-# ==============================================================
+# ==================================================================================================
 
 # =========================
 # VIEW ATTENDEES
@@ -437,7 +452,7 @@ def delete_attendee(id):
 
     return redirect('/attendees')
 
-# =================================================================
+# ==================================================================================================
 
 # =========================
 # VIEW REGISTRATIONS
@@ -547,6 +562,7 @@ def delete_registration(id):
     conn.close()
 
     return redirect('/registrations')
+# ==================================================================================================
 
 
 # =========================
