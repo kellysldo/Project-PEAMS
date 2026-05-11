@@ -1,0 +1,56 @@
+/* Custom Purple from your Figma */
+:root {
+    --peams-purple: #B18CFE; 
+}
+
+.bg-purple {
+    background-color: var(--peams-purple);
+}
+
+.text-purple-link {
+    color: var(--peams-purple);
+    text-decoration: none;
+}
+
+/* Underline Inputs */
+.form-underline {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #444;
+    color: white;
+    width: 100%;
+    padding: 10px 0;
+    outline: none;
+    transition: border-bottom 0.3s ease;
+}
+
+.form-underline:focus {
+    border-bottom: 2px solid var(--peams-purple);
+}
+
+.form-underline::placeholder {
+    color: #555;
+    font-size: 0.9rem;
+}
+
+/* Rounded Pill Button */
+.btn-purple-pill {
+    background-color: var(--peams-purple);
+    border: none;
+    border-radius: 50px;
+    color: white;
+    padding: 12px;
+    font-weight: 600;
+}
+
+.btn-purple-pill:hover {
+    background-color: #9b74f0;
+    color: white;
+}
+
+/* Illustration Box Styling */
+.illustration-box img {
+    max-width: 80%;
+    float: right;
+    border-radius: 40px 0 0 40px; /* Matches your Figma curve */
+}
