@@ -50,7 +50,7 @@ CREATE TABLE attendees (
 
 -- -----------------------------------------------
 -- Table: registrations
--- Links attendees to events; tracks QR and status
+-- Links attendees to events; tracks attendance status
 -- -----------------------------------------------
 CREATE TABLE registrations (
     registration_id   INT AUTO_INCREMENT PRIMARY KEY,
@@ -58,7 +58,6 @@ CREATE TABLE registrations (
     event_id          INT      NOT NULL,
     attendance_status ENUM('registered', 'present', 'absent') DEFAULT 'registered',
     registration_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    qr_code           VARCHAR(255) UNIQUE,
     FOREIGN KEY (attendee_id) REFERENCES attendees(attendee_id) ON DELETE CASCADE,
     FOREIGN KEY (event_id)    REFERENCES events(event_id)       ON DELETE CASCADE,
     UNIQUE KEY unique_registration (event_id, attendee_id)

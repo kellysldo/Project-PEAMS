@@ -1,7 +1,7 @@
 # Project-PEAMS
 # Professional Events Attendance Management System
 
-A web-based attendance tracking system that allows organizers to manage events, register participants, and monitor attendance with QR code support.
+A web-based attendance tracking system that allows organizers to manage events, register participants, and monitor attendance.
 
 ---
 
@@ -22,12 +22,10 @@ The system covers the following:
 - Creation, editing, and deletion of events by authorized users
 - Registration and management of attendees
 - Recording and updating of attendance status per event (`registered`, `present`, `absent`)
-- QR code generation for each registered attendee per event
 - Basic reporting of attendance statistics on the dashboard
 - Role-based access control distinguishing `admin` and `staff` users
 
 The system does **not** cover:
-- Real-time QR code scanning via camera
 - Email or SMS notifications to attendees
 - Payment or ticketing functionality
 
@@ -48,7 +46,6 @@ To develop a functional web-based Events Attendance Management System using Pyth
 - Establish a normalized relational database with at least 3 related tables
 - Provide a user-friendly interface built with Bootstrap 5 for ease of navigation
 - Implement role-based user authentication (`admin` and `staff`) to control access
-- Generate QR codes for attendee registrations to support faster check-in processes
 - Enable search functionality for attendees, events, and registrations
 - Handle duplicate registration attempts gracefully with user-facing error messages
 
@@ -64,7 +61,6 @@ To develop a functional web-based Events Attendance Management System using Pyth
 - Attendees are registered globally and can be linked to multiple events via registrations
 - Each attendee can only be registered once per event (enforced by a `UNIQUE KEY` on `event_id + attendee_id`); attempting a duplicate registration shows a friendly error message instead of crashing
 - Attendance status can be set to `registered`, `present`, or `absent`
-- A unique QR code is generated for each registration record
 - Only `admin`-role users can access the Users management page; `staff` users are redirected with an "Access denied" message
 
 ### Role Permissions
@@ -89,7 +85,6 @@ To develop a functional web-based Events Attendance Management System using Pyth
 - A user must be logged in to access any management feature
 - Session expires upon logout or browser close
 - Attendance status defaults to `registered` upon creation
-- QR code field must be unique across all registrations
 
 ---
 
@@ -102,7 +97,7 @@ The ERD illustrates the following entities and relationships:
 - **users** — stores organizer accounts; one user manages many events (1:N)
 - **events** — stores event details; linked to users via `user_id` (FK)
 - **attendees** — stores participant information; one attendee can have many registrations (1:N)
-- **registrations** — bridge/junction table linking attendees to events; tracks attendance status and QR code
+- **registrations** — bridge/junction table linking attendees to events; tracks attendance status
 
 ### Relational Model
 ![Relational Model](docs/diagram/rm.png)
@@ -112,7 +107,7 @@ The ERD illustrates the following entities and relationships:
 | users         | **user_id** (PK), full_name, username, email, password, role, created_at                                        |
 | events        | **event_id** (PK), *user_id* (FK → users), event_name, event_date, location, description                        |
 | attendees     | **attendee_id** (PK), fullname, email, contact_no, address                                                      |
-| registrations | **registration_id** (PK), *attendee_id* (FK), *event_id* (FK), attendance_status, registration_date, qr_code    |
+| registrations | **registration_id** (PK), *attendee_id* (FK), *event_id* (FK), attendance_status, registration_date |
 
 ---
 
@@ -273,8 +268,6 @@ http://localhost:5000
 | Flask                  | 3.0.x   | Web framework                   |
 | flask-bcrypt           | 1.x.x   | Password hashing                |
 | mysql-connector-python | 8.x.x   | MySQL database connectivity     |
-| qrcode                 | 7.x.x   | QR code generation              |
-| Pillow                 | 10.x.x  | Image processing for QR codes   |
 | python-dotenv          | 1.x.x   | Environment variable management |
 
 ### System Requirements
