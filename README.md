@@ -31,7 +31,7 @@ The system does **not** cover:
 
 ### Target Users
 - **Admins** — Have full access to the system including user management; can create and manage events, attendees, and registrations
-- **Staff** — Can manage events, attendees, and registrations but cannot access the Users management page
+- **User** — Can manage events, attendees, and registrations but cannot access the Users management page
 - **Attendees** — Individuals registered into the system by organizers; their attendance is tracked but they do not log in
 
 ---
@@ -224,15 +224,22 @@ pip install -r requirements.txt
 - Click **Import** → select `database/schema.sql` → click **Go**
 - Click **Import** again → select `database/initial_data.sql` → click **Go**
 
-**6. Configure the database connection**
+**6. Configure environment variables**
 
-Open `src/database.py` and confirm the connection settings match your XAMPP setup:
-```python
-host     = "localhost"
-user     = "root"
-password = ""          # default XAMPP has no password
-database = "CCCS105"
+In the `src/` directory, create a `.env` file by copying the provided example:
+```bash
+cp src/.env.example src/.env
 ```
+
+Then open `src/.env` and confirm the values match your XAMPP setup:
+```
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=        # default XAMPP has no password
+DB_NAME=CCCS105
+```
+
+> The application loads these values automatically at runtime using `python-dotenv`. Do **not** commit your `.env` file to version control.
 
 **7. Run the application**
 ```bash
