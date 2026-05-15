@@ -11,6 +11,7 @@ USE CCCS105;
 -- -----------------------------------------------
 INSERT INTO users (full_name, username, email, password, role)
 VALUES
+('Administrator', 'admin', 'admin@gmail.com', '$2b$12$st8w69ATdysD9w2rrEwMju8pHqH7r/9ll6Wg2bAQ0s8rkaN1oZY7K', 'admin'),
 ('Juan Dela Cruz', 'juan01', 'juan01@gmail.com', 'pass123', 'admin'),
 ('Maria Santos', 'maria02', 'maria02@outlook.com', 'pass123', 'staff'),
 ('John Reyes', 'john03', 'john03@my.cspc.edu.ph', 'pass123', 'staff'),

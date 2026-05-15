@@ -57,31 +57,31 @@
                             </div>
 
                             <div class="mb-3">
-
-                                <label class="form-label">
-                                    Username
-                                </label>
+                                <label>Username</label>
 
                                 <input type="text"
-                                       name="username"
-                                       class="form-control"
-                                       placeholder="Enter username"
-                                       required>
+                                    name="username"
+                                    class="form-control"
+                                    maxlength="20"
+                                    required>
 
+                                <div class="text-danger mt-1">
+                                    Username must not exceed 20 characters.
+                                </div>
                             </div>
 
                             <div class="mb-4">
-
-                                <label class="form-label">
-                                    Password
-                                </label>
+                                <label>Password</label>
 
                                 <input type="password"
-                                       name="password"
-                                       class="form-control"
-                                       placeholder="Enter password"
-                                       required>
+                                    name="password"
+                                    class="form-control"
+                                    maxlength="16"
+                                    required>
 
+                                <div class="text-danger mt-1">
+                                    Password must not exceed 20 characters.
+                                </div>
                             </div>
 
                             <button type="submit"
@@ -92,6 +92,16 @@
                             </button>
 
                         </form>
+                        
+                        {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <div class="alert alert-danger">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
 
                         <hr>
 

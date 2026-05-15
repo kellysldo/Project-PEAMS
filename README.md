@@ -187,9 +187,9 @@ http://localhost:5000
 
 | Name                    | Role                        | Responsibilities                                              |
 |-------------------------|-----------------------------|---------------------------------------------------------------|
-| Kelly Saldo             | Backend Developer           | Flask routes, database connection, CRUD logic, authentication |
-| Micabelle Allison Nomo  | Frontend Developer          | HTML templates, CSS styling, Bootstrap layout, UI design      |
-| Rizelyn Joy Borbe       | Database & Documentation    | ERD, relational model, SQL schema, initial data, README, testing |
+| Kelly Saldo             | Fullstack Developer         | Flask routes, database connection, CRUD logic, authentication, HTML templates,  Bootstrap layout |
+| Micabelle Allison Nomo  | Frontend Developer          | HTML templates, CSS styling, Bootstrap layout, UI design, testing      |
+| Rizelyn Joy Borbe       | Backend Developer, Database & Documentation    | ERD, relational model, SQL schema, initial data, README, testing, Flask routes, database connection |
 
 ---
 

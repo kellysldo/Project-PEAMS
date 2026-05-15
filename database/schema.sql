@@ -1,5 +1,5 @@
 -- ============================================
--- Personal Events Attendance Manager System
+-- Events Attendance Management System
 -- Course: Information Management 1 - CCCS105
 -- Database: CCCS105
 -- ============================================
@@ -13,8 +13,12 @@ USE CCCS105;
 -- -----------------------------------------------
 CREATE TABLE users (
     user_id     INT AUTO_INCREMENT PRIMARY KEY,
+    full_name   VARCHAR(100),
     username    VARCHAR(50)  NOT NULL UNIQUE,
-    password    VARCHAR(255) NOT NULL
+    email       VARCHAR(100) NOT NULL UNIQUE,
+    password    VARCHAR(255) NOT NULL,
+    role        ENUM('admin', 'staff') DEFAULT 'staff'
+    created_at  TIMESTAMP DEFAULT 'current_timestamp'
 );
 
 -- -----------------------------------------------
@@ -23,11 +27,12 @@ CREATE TABLE users (
 -- -----------------------------------------------
 CREATE TABLE events (
     event_id    INT AUTO_INCREMENT PRIMARY KEY,
-    user_id     INT          NOT NULL,
+    user_id     INT NOT NULL,
     event_name  VARCHAR(100) NOT NULL,
     event_date  DATE         NOT NULL,
     location    VARCHAR(100),
     description TEXT,
+    INDEX (user_id),  
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
