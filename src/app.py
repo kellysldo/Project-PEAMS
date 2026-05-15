@@ -3,6 +3,7 @@ from database import get_connection
 from werkzeug.security import generate_password_hash
 from flask_bcrypt import Bcrypt
 import os
+import re
 print("CURRENT DIR:", os.getcwd())
 
 app = Flask(__name__)
@@ -17,7 +18,15 @@ app.secret_key = "your_secret_key"
 @app.route('/users')
 def users():
 
+    if session.get('role') != 'admin':
+        flash("Access denied!")
+        return redirect('/')
+
     search = request.args.get('search', '')
+# @app.route('/users')
+# def users():
+
+#     search = request.args.get('search', '')
 
     conn = get_connection()
     cursor = conn.cursor(dictionary=True)
@@ -45,6 +54,10 @@ def users():
 # =========================
 @app.route('/users/add', methods=['GET', 'POST'])
 def add_user():
+
+    if session.get('role') != 'admin':
+        flash("Access denied!")
+        return redirect('/')
 
     if request.method == 'POST':
 
@@ -82,6 +95,10 @@ def add_user():
 # =========================
 @app.route('/users/edit/<int:id>', methods=['GET', 'POST'])
 def edit_user(id):
+
+    if session.get('role') != 'admin':
+        flash("Access denied!")
+        return redirect('/')
 
     conn = get_connection()
     cursor = conn.cursor(dictionary=True)
@@ -132,6 +149,10 @@ def edit_user(id):
 # =========================
 @app.route('/users/delete/<int:id>')
 def delete_user(id):
+
+    if session.get('role') != 'admin':
+        flash("Access denied!")
+        return redirect('/')
 
     conn = get_connection()
     cursor = conn.cursor()
@@ -221,7 +242,7 @@ def add_event():
         """
 
         values = (
-            1,
+            session['user_id'],
             event_name,
             event_date,
             location,
@@ -283,9 +304,12 @@ def edit_event(id):
 
         return redirect('/events')
 
-    query = "SELECT * FROM events WHERE event_id = %s"
+    query = """
+    SELECT * FROM events
+    WHERE user_id = %s
+    """
 
-    cursor.execute(query, (id,))
+    cursor.execute(query, (session['user_id'],))
 
     event = cursor.fetchone()
 
@@ -635,7 +659,7 @@ def register():
         # EMAIL VALIDATION
         email_pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
 
-        if not request.match(email_pattern, email):
+        if not re.match(email_pattern, email):
             flash("Invalid email format!")
             return redirect('/register')
 
@@ -737,6 +761,7 @@ def login():
 
             session['user_id'] = user['user_id']
             session['username'] = user['username']
+            session['role'] = user['role']
 
             flash("Login successful!")
 
